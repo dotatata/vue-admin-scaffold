@@ -1,5 +1,5 @@
 {
-  "name": "jiayun-erp-wms",
+  "name": "vue-admin-scaffold",
   "version": "4.4.0",
   "description": "A magical vue admin. An out-of-box UI solution for enterprise applications. Newest development stack of vue. Lots of awesome features",
   "author": "Kaj <dotatata@163.com>",
@@ -36,6 +36,7 @@
     "sortablejs": "1.8.4",
     "tui-editor": "1.3.3",
     "vue": "2.6.10",
+    "vue-admin-scaffold": "file:",
     "vue-count-to": "1.0.13",
     "vue-router": "3.0.2",
     "vue-splitpane": "1.0.4",

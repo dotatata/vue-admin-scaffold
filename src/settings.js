@@ -1,5 +1,5 @@
 module.exports = {
-  title: '嘉云ERP',
+  title: 'vue-admin-scaffold',
 
   /**
    * @type {boolean} true | false

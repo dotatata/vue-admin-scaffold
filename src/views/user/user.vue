@@ -7,7 +7,7 @@
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索用户
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit-outline" @click="handleCreate">
+      <el-button v-permission="['user:create']" class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit-outline" @click="handleCreate">
         添加用户
       </el-button>
     </div>
@@ -46,10 +46,10 @@
       <el-table-column label="修改时间" prop="updateDate" width="170px" align="center" />
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button type="primary" size="mini" icon="el-icon-edit" @click="handleUpdate(row)">
+          <el-button v-permission="['user:update']" type="primary" size="mini" icon="el-icon-edit" @click="handleUpdate(row)">
             修改
           </el-button>
-          <el-button v-if="row.status!='deleted'" size="mini" type="danger" icon="el-icon-delete" @click="handleDelete(row,$index)">
+          <el-button v-if="row.status!='deleted'" v-permission="['user:delete']" size="mini" type="danger" icon="el-icon-delete" @click="handleDelete(row,$index)">
             删除
           </el-button>
         </template>
@@ -79,7 +79,7 @@
         <el-button @click="dialogFormVisible = false">
           取 消
         </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
+        <el-button v-permission="['user:create', 'user:update']" type="primary" @click="dialogStatus==='create'?createData():updateData()">
           提 交
         </el-button>
       </div>
@@ -90,6 +90,7 @@
 <script>
 import { fetchUserList, createUser, getUserWithRoles, updateUser, deleteUser } from '@/api/user'
 import { fetchRoles } from '@/api/role'
+import permission from '@/directive/permission/index.js' // 权限判断指令
 import waves from '@/directive/waves' // waves directive
 // import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -98,7 +99,7 @@ import Pagination from '@/components/Pagination' // secondary package based on e
 export default {
   name: 'UserManager',
   components: { Pagination },
-  directives: { waves },
+  directives: { waves, permission },
   data() {
     return {
       tableKey: 0,

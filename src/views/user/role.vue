@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit-outline" @click="handleCreate">
+      <el-button v-permission="['role:create']" class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit-outline" @click="handleCreate">
         添加角色
       </el-button>
     </div>
@@ -39,10 +39,10 @@
       <el-table-column label="修改时间" prop="updateDate" width="170px" align="center" />
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button type="primary" size="mini" icon="el-icon-edit" @click="handleUpdate(row)">
+          <el-button v-permission="['role:update']" type="primary" size="mini" icon="el-icon-edit" @click="handleUpdate(row)">
             修改
           </el-button>
-          <el-button v-if="row.status!='deleted'" size="mini" type="danger" icon="el-icon-delete" @click="handleDelete(row,$index)">
+          <el-button v-if="row.status!='deleted'" v-permission="['role:delete']" size="mini" type="danger" icon="el-icon-delete" @click="handleDelete(row,$index)">
             删除
           </el-button>
         </template>
@@ -52,7 +52,7 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getRoleList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="80px" style="width: 400px; margin-left:50px;">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="80px" style="width: 85%; margin-left:50px;">
         <el-form-item label="角色名称" prop="name">
           <el-input v-model="temp.name" />
         </el-form-item>
@@ -68,7 +68,7 @@
           </el-select>
         </el-form-item> -->
         <el-form-item label="角色权限">
-          <el-checkbox-group v-model="temp.permissionIds" style="width: 500px">
+          <el-checkbox-group v-model="temp.permissionIds" style="width: 100%">
             <el-checkbox v-for="item in permissions" :key="item.id" :label="item.id" :value="item.id">
               {{ item.name }}
             </el-checkbox>
@@ -79,7 +79,7 @@
         <el-button @click="dialogFormVisible = false">
           取 消
         </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
+        <el-button v-permission="['role:create', 'role:update']" type="primary" @click="dialogStatus==='create'?createData():updateData()">
           提 交
         </el-button>
       </div>
@@ -90,6 +90,7 @@
 <script>
 import { fetchRoleList, createRole, getRoleWithPermissions, updateRole, deleteRole } from '@/api/role'
 import { fetchPermissions } from '@/api/permission'
+import permission from '@/directive/permission/index.js' // 权限判断指令
 import waves from '@/directive/waves' // waves directive
 // import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -98,7 +99,7 @@ import Pagination from '@/components/Pagination' // secondary package based on e
 export default {
   name: 'RoleManager',
   components: { Pagination },
-  directives: { waves },
+  directives: { waves, permission },
   data() {
     return {
       tableKey: 0,
